@@ -1,13 +1,14 @@
+import glob
 import os
 from os.path import expanduser  # ホームディレクトリ取得のため
 
 
-def get_homedir():
+def get_dir_path(path):
     """
-    ホームディレクトリを取得する関数
+    ディレクトリpathを取得する関数
     :return: string
     """
-    return expanduser("~")
+    return expanduser(path)
 
 
 def check_mkdirs(path):
@@ -23,6 +24,19 @@ def check_mkdirs(path):
         os.makedirs(path)
 
 
+def get_file_info_from_folder(path):
+    """
+    フォルダ内のファイル、フォルダ一覧を取得
+    :param path: string
+    :return:
+    """
+
+    files = glob.glob(path)
+    print("現在、デスクトップはこのようになっています")
+    for file in files:
+        print(file)
+
+
 def clean_desktop_handler():
     """
     デスクトップをきれいにする関数
@@ -30,10 +44,12 @@ def clean_desktop_handler():
     :return: void
     """
 
-    home_dir = get_homedir()  # ホームディレクトリを取得
-    path_to_backup = home_dir + "/desktop-backups"  # デスクトップファイルPath
+    home_dir = get_dir_path("~")  # ホームディレクトリを取得
+    backup_path = home_dir + "/desktop-backups"  # デスクトップファイルPath
+    check_mkdirs(backup_path)  # バックアップがあるか確認し、なかったら作成
 
-    check_mkdirs(path_to_backup)
+    desktop_path = get_dir_path("~/Desktop")  # Desktopフォルダパス
+    get_file_info_from_folder(desktop_path + "/*")
 
 
 if __name__ == "__main__":
