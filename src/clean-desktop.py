@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 import glob  # フォルダ情報取得のため
 import os
 import shutil  # ファイル移動のため
