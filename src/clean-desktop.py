@@ -54,8 +54,10 @@ def move_to_backup(files, path):
     print("デスクトップの掃除を開始します >>> ")
     for file in files:
         ext = get_file_ext(file)  # ファイル拡張子を取得
+        if not ext:
+            return
         backup_path_by_extension = path + "/" + ext  # ファイルごとのバックアップフォルダ
-        check_mkdirs(backup_path_by_extension, f"新しい拡張子が掃除対象になりました。{ext}のフォルダを作成します")  # 拡張子のバックアップフォルダが存在していなかったら作成する
+        check_mkdirs(backup_path_by_extension, f"新しい拡張子が掃除対象になりました。フォルダを作成します")  # 拡張子のバックアップフォルダが存在していなかったら作成する
         shutil.move(file, backup_path_by_extension)
         print(file + "が移動完了しました。。。。")
 
