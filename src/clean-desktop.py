@@ -14,17 +14,19 @@ def get_dir_path(path):
     return expanduser(path)
 
 
-def check_mkdirs(path):
+def check_mkdirs(path, message=None):
     """
     フォルダが存在していなかったら作成する関数
     :param path: string
+    :param message: string?
     :return:
     """
 
     # もしフォルダがなかったら作成する
     if not os.path.isdir(path):
-        print('初めての実行ですね。デスクトップのファイルをBackUpするためにバックアップフォルダを作成しました')
         os.makedirs(path)
+        if message:
+            print(message)
 
 
 def get_file_info_from_folder(path):
@@ -48,11 +50,13 @@ def move_to_backup(files, path):
     print("現在、デスクトップはこのようになっています")
     for file in files:
         print(file)
-        get_file_ext(file)
 
     print("デスクトップの掃除を開始します >>> ")
     for file in files:
-        shutil.move(file, path)
+        ext = get_file_ext(file)  # ファイル拡張子を取得
+        backup_path_by_extension = path + "/" + ext  # ファイルごとのバックアップフォルダ
+        check_mkdirs(backup_path_by_extension, f"新しい拡張子が掃除対象になりました。{ext}のフォルダを作成します")  # 拡張子のバックアップフォルダが存在していなかったら作成する
+        shutil.move(file, backup_path_by_extension)
         print(file + "が移動完了しました。。。。")
 
 
@@ -63,8 +67,7 @@ def get_file_ext(path):
     :return: string
     """
     _, ext = os.path.splitext(path)
-    print('拡張子は' + ext)
-    return ext
+    return ext.replace(".", '')  # 先頭の.を取り除く
 
 
 def clean_desktop_handler():
@@ -76,7 +79,7 @@ def clean_desktop_handler():
 
     home_dir = get_dir_path("~")  # ホームディレクトリを取得
     backup_path = home_dir + "/desktop-backups"  # デスクトップファイルPath
-    check_mkdirs(backup_path)  # バックアップがあるか確認し、なかったら作成
+    check_mkdirs(backup_path, '初めての実行ですね。デスクトップのファイルをBackUpするためにバックアップフォルダを作成しました')  # バックアップがあるか確認し、なかったら作成
 
     desktop_path = get_dir_path("~/Desktop")  # Desktopフォルダパス
     desktop_files = get_file_info_from_folder(desktop_path + "/*")  # Desktopにあるファイルを取得
