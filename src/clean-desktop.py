@@ -48,11 +48,23 @@ def move_to_backup(files, path):
     print("現在、デスクトップはこのようになっています")
     for file in files:
         print(file)
+        get_file_ext(file)
 
     print("デスクトップの掃除を開始します >>> ")
     for file in files:
         shutil.move(file, path)
         print(file + "が移動完了しました。。。。")
+
+
+def get_file_ext(path):
+    """
+    ファイルの拡張子を取得
+    :param path:
+    :return: string
+    """
+    _, ext = os.path.splitext(path)
+    print('拡張子は' + ext)
+    return ext
 
 
 def clean_desktop_handler():
