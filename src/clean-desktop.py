@@ -93,5 +93,41 @@ def clean_desktop_handler():
         move_to_backup(desktop_files, backup_path)
 
 
+def clean_backup_handler():
+    """
+    バックアップフォルダをきれいにする関数
+    :return:
+    """
+
+    backup_path = get_dir_path("~") + '/desktop-backups'  # backup path
+    backup_files = get_file_info_from_folder(backup_path + "/*")  # backup files
+
+    if not backup_files:
+        return
+    if backup_files:
+        files = [f for f in backup_files if os.path.isfile(os.path.join(backup_path, f))]
+        for file in files:
+            ext = get_file_ext(file)  # get extension
+            # 拡張子がない、変な形で保存されたファイルが存在するのでそういうものはスキップ
+            if not ext:
+                return
+            backup_path_by_ext = backup_path + "/" + ext  # get proper backup path
+            shutil.move(file, backup_path_by_ext)  # move file to proper dir
+            print(file, "を移動しました")
+
+
+def clean_handler():
+    print('したい動作を選んでください')
+    print('1. デスクトップをきれいにしたい [default]')
+    print('2. バックアップフォルダを整理したい')
+    cmd = input()
+    if not cmd or int(cmd) == 1:
+        clean_desktop_handler()
+    if int(cmd) == 2:
+        clean_backup_handler()
+    else:
+        return
+
+
 if __name__ == "__main__":
-    clean_desktop_handler()
+    clean_handler()
