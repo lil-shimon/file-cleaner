@@ -24,7 +24,6 @@ def check_mkdirs(path, message=None):
 
     # もしフォルダがなかったら作成する
     if not os.path.isdir(path):
-        print("path", path)
         try:
             os.makedirs(path)
         except FileExistsError:
