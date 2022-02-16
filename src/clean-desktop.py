@@ -59,13 +59,17 @@ def move_to_backup(files, path):
     for file in files:
         ext = get_file_ext(file)  # ファイル拡張子を取得
         if not ext:
+            folder_path = path + "/folder"
+            check_mkdirs(folder_path)
+            shutil.move(file, folder_path)
             return
-        backup_path_by_extension = path + "/" + ext  # ファイルごとのバックアップフォルダ
-        check_mkdirs(backup_path_by_extension, "新しい拡張子が掃除対象になりました。フォルダを作成します")  # 拡張子のバックアップフォルダが存在していなかったら作成する
-        try:
-            shutil.move(file, backup_path_by_extension)
-        except shutil.Error:
-            print(file, "が移動できませんでした")
+        if ext:
+            backup_path_by_extension = path + "/" + ext  # ファイルごとのバックアップフォルダ
+            check_mkdirs(backup_path_by_extension, "新しい拡張子が掃除対象になりました。フォルダを作成します")  # 拡張子のバックアップフォルダが存在していなかったら作成する
+            try:
+                shutil.move(file, backup_path_by_extension)
+            except shutil.Error:
+                print(file, "が移動できませんでした")
 
         print(file + "が移動完了しました。。。。")
 
@@ -160,10 +164,10 @@ def clean_download_handler():
             folder_path = download_path + '/' + "/folder"  # for files or folders don't have extension
             check_mkdirs(folder_path)
             shutil.move(file, folder_path)
-            continue
-        download_path_by_ext = download_path + "/" + ext  # full path (include extension data)
-        check_mkdirs(download_path_by_ext, "新しい拡張子なので、フォルダを作成します")  # check folder by extension exists
-        shutil.move(file, download_path_by_ext)  # move file
+        if ext:
+            download_path_by_ext = download_path + "/" + ext  # full path (include extension data)
+            check_mkdirs(download_path_by_ext, "新しい拡張子なので、フォルダを作成します")  # check folder by extension exists
+            shutil.move(file, download_path_by_ext)  # move file
         print(file, "を移動しました")
 
     print("掃除が終わりました!")
