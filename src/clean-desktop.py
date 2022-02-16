@@ -156,7 +156,10 @@ def clean_download_handler():
 
     for file in files:
         ext = get_file_ext(file)  # get extension
-        if not ext:  # if folder, skip
+        if not ext:
+            folder_path = download_path + '/' + "/folder"  # for files or folders don't have extension
+            check_mkdirs(folder_path)
+            shutil.move(file, folder_path)
             continue
         download_path_by_ext = download_path + "/" + ext  # full path (include extension data)
         check_mkdirs(download_path_by_ext, "新しい拡張子なので、フォルダを作成します")  # check folder by extension exists
