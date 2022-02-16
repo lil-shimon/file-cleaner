@@ -5,6 +5,8 @@ import os
 import shutil  # ファイル移動のため
 from os.path import expanduser  # ホームディレクトリ取得のため
 
+from utils.dir import display_tree  # フォルダ一覧取得
+
 
 def get_dir_path(path):
     """
@@ -171,6 +173,11 @@ def clean_download_handler():
         print(file, "を移動しました")
 
     print("掃除が終わりました!")
+    print("ファイル構成を確認しますか？ yes/no [default=no]")
+    opt = input()
+    if opt == "yes" or opt == "y":
+        print("最終的にダウンロードフォルダはこのようなフォルダ構成になりました")
+        print(display_tree(download_path))
 
 
 def clean_handler():
