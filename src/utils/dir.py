@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 import glob
 import os
 import pathlib
@@ -41,3 +43,11 @@ def display_tree(path, layer=0, is_last=False, current_indent='　'):
             branch = '└' if is_last_path(i) else '├'
             print(
                 '{indent}{branch}{filename}'.format(indent=indent_lower, branch=branch, filename=p.split('/')[::-1][0]))
+
+
+def ask_display_tree(path):
+    opt = input()
+
+    if opt == "yes" or opt == "y":
+        print("最終的にフォルダはこのようなフォルダ構成になりました")
+        print(display_tree(path))

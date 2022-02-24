@@ -5,7 +5,7 @@ import os
 import shutil  # ファイル移動のため
 from os.path import expanduser  # ホームディレクトリ取得のため
 
-from utils.dir import display_tree  # フォルダ一覧取得
+from utils.dir import ask_display_tree  # フォルダ一覧取得
 
 
 def get_dir_path(path):
@@ -67,7 +67,9 @@ def move_to_backup(files, path):
             return
         if ext:
             backup_path_by_extension = path + "/" + ext  # ファイルごとのバックアップフォルダ
-            check_mkdirs(backup_path_by_extension, "新しい拡張子が掃除対象になりました。フォルダを作成します")  # 拡張子のバックアップフォルダが存在していなかったら作成する
+            # 拡張子のバックアップフォルダが存在していなかったら作成する
+            check_mkdirs(backup_path_by_extension,
+                         "新しい拡張子が掃除対象になりました。フォルダを作成します")
             try:
                 shutil.move(file, backup_path_by_extension)
             except shutil.Error:
@@ -95,10 +97,13 @@ def clean_desktop_handler():
 
     home_dir = get_dir_path("~")  # ホームディレクトリを取得
     backup_path = home_dir + "/desktop-backups"  # デスクトップファイルPath
-    check_mkdirs(backup_path, '初めての実行ですね。デスクトップのファイルをBackUpするためにバックアップフォルダを作成しました')  # バックアップがあるか確認し、なかったら作成
+    # バックアップがあるか確認し、なかったら作成
+    check_mkdirs(
+        backup_path, '初めての実行ですね。デスクトップのファイルをBackUpするためにバックアップフォルダを作成しました')
 
     desktop_path = get_dir_path("~/Desktop")  # Desktopフォルダパス
-    desktop_files = get_file_info_from_folder(desktop_path + "/*")  # Desktopにあるファイルを取得
+    desktop_files = get_file_info_from_folder(
+        desktop_path + "/*")  # Desktopにあるファイルを取得
 
     if not desktop_files:  # デスクトップに何もない場合
         print("デスクトップはとてもきれいです！")
@@ -114,13 +119,15 @@ def clean_backup_handler():
     """
 
     backup_path = get_dir_path("~") + '/desktop-backups'  # backup path
-    backup_files = get_file_info_from_folder(backup_path + "/*")  # backup files
+    backup_files = get_file_info_from_folder(
+        backup_path + "/*")  # backup files
 
     if not backup_files:
         print("バックアップフォルダはとてもきれいです！")
         return
     if backup_files:
-        files = [f for f in backup_files if os.path.isfile(os.path.join(backup_path, f))]
+        files = [f for f in backup_files if os.path.isfile(
+            os.path.join(backup_path, f))]
         for file in files:
             ext = get_file_ext(file)  # get extension
             # 拡張子がない、変な形で保存されたファイルが存在するのでそういうものはスキップ
@@ -139,7 +146,8 @@ def clean_download_handler():
 
     root_path = get_dir_path("~")
     download_path = os.path.join(root_path, "Downloads")  # download path
-    download_files = get_file_info_from_folder(download_path + "/*")  # download files
+    download_files = get_file_info_from_folder(
+        download_path + "/*")  # download files
 
     print("ダウンロードフォルダ用のバックアップを作成しますか？ y/n [default: no]")
     cmd = input()
@@ -148,8 +156,10 @@ def clean_download_handler():
         download_backup_path = root_path + "/download-backups"
         check_mkdirs(download_backup_path, "ダウンロード用のバックアップフォルダを作成しました。")
         try:
-            shutil.rmtree(download_backup_path)  # if there is download backup folder, delete it.
-            shutil.copytree(download_path, download_backup_path)  # copy download folder into download backup folder
+            # if there is download backup folder, delete it.
+            shutil.rmtree(download_backup_path)
+            # copy download folder into download backup folder
+            shutil.copytree(download_path, download_backup_path)
             print("バックアップを作成しました")
         except FileExistsError:  # just in case
             return
@@ -158,34 +168,30 @@ def clean_download_handler():
         print("ダウンロードフォルダはとてもきれいです！")
         return
 
-    files = [f for f in download_files if os.path.isfile(os.path.join(download_path, f))]  # check file exists
+    files = [f for f in download_files if os.path.isfile(
+        os.path.join(download_path, f))]  # check file exists
 
     for file in files:
         ext = get_file_ext(file)  # get extension
         if not ext:
-            folder_path = download_path + '/' + "/folder"  # for files or folders don't have extension
+            # for files or folders don't have extension
+            folder_path = download_path + '/' + "/folder"
             check_mkdirs(folder_path)
             shutil.move(file, folder_path)
         if ext:
-            download_path_by_ext = download_path + "/" + ext  # full path (include extension data)
-            check_mkdirs(download_path_by_ext, "新しい拡張子なので、フォルダを作成します")  # check folder by extension exists
+            download_path_by_ext = download_path + "/" + \
+                ext  # full path (include extension data)
+            # check folder by extension exists
+            check_mkdirs(download_path_by_ext, "新しい拡張子なので、フォルダを作成します")
             shutil.move(file, download_path_by_ext)  # move file
         print(file, "を移動しました")
 
     print("掃除が終わりました!")
     print("ファイル構成を確認しますか？ yes/no [default=no]")
-    opt = input()
-    if opt == "yes" or opt == "y":
-        print("最終的にダウンロードフォルダはこのようなフォルダ構成になりました")
-        print(display_tree(download_path))
+    ask_display_tree(download_path)
 
 
-def clean_handler():
-    print('したい動作を選んでください')
-    print('1. デスクトップをきれいにしたい [default]')
-    print('2. バックアップフォルダを整理したい')
-    print('3. ダウンロードフォルダを整理したい')
-    cmd = input()
+def select_act(cmd):
     if not cmd or int(cmd) == 1:
         clean_desktop_handler()
     if int(cmd) == 2:
@@ -194,6 +200,15 @@ def clean_handler():
         clean_download_handler()
     else:
         return
+
+
+def clean_handler():
+    print('したい動作を選んでください')
+    print('1. デスクトップをきれいにしたい [default]')
+    print('2. バックアップフォルダを整理したい')
+    print('3. ダウンロードフォルダを整理したい')
+    cmd = input()
+    select_act(int(cmd))
 
 
 if __name__ == "__main__":
