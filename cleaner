@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+from src.clean_desktop import clean_handler
+
+def main():
+  clean_handler()
+
+
+if __name__ == "__main__":
+  main()
