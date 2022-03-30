@@ -1,14 +1,9 @@
-# ファイル構造をきれいにしてくれるプログラム (作成中)
+# ファイル構造をきれいにしてくれるプログラム / file cleaner
 
-## 使い方
+## 使い方 / how to use
 
 ```shell
 git clone https://github.com/lil-shimon/file-cleaner.git
-cd file-cleaner
-bash test.sh
+bash install.sh
 
 ```
-
-## タスクリスト
-- [x] デスクトップにあるファイル全てをバックアップフォルダに移動する
-- [x] 拡張子ごとにフォルダを分ける
