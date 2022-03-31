@@ -5,6 +5,7 @@ import os
 import shutil  # ファイル移動のため
 from os.path import expanduser  # ホームディレクトリ取得のため
 import sys  # コマンドを受け取るため
+from utils.command import args_handler  
 from utils.dir import ask_display_tree  # フォルダ一覧取得
 
 
@@ -207,7 +208,11 @@ def clean_handler():
 
     # 引数があった場合
     if 2 <= len(args):
-        print("未対応です")
+        cmd = args_handler(args[1])
+        if not cmd:
+            return
+        else:
+            select_act(cmd)
 
     # 引数がない場合
     else:
