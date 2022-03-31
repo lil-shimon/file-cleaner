@@ -3,8 +3,8 @@
 import glob  # フォルダ情報取得のため
 import os
 import shutil  # ファイル移動のため
-from os.path import expanduser
-import sys
+from os.path import expanduser  # ホームディレクトリ取得のため
+import sys  # コマンドを受け取るため
 from utils.dir import ask_display_tree  # フォルダ一覧取得
 
 
