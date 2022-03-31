@@ -3,8 +3,8 @@
 import glob  # フォルダ情報取得のため
 import os
 import shutil  # ファイル移動のため
-from os.path import expanduser  # ホームディレクトリ取得のため
-
+from os.path import expanduser
+import sys
 from utils.dir import ask_display_tree  # フォルダ一覧取得
 
 
@@ -203,12 +203,20 @@ def select_act(cmd):
 
 
 def clean_handler():
-    print('したい動作を選んでください')
-    print('1. デスクトップをきれいにしたい [default]')
-    print('2. バックアップフォルダを整理したい')
-    print('3. ダウンロードフォルダを整理したい')
-    cmd = input()
-    select_act(int(cmd))
+    args = sys.argv
+
+    # 引数があった場合
+    if 2 <= len(args):
+        print("未対応です")
+
+    # 引数がない場合
+    else:
+        print('したい動作を選んでください')
+        print('1. デスクトップをきれいにしたい [default]')
+        print('2. バックアップフォルダを整理したい')
+        print('3. ダウンロードフォルダを整理したい')
+        cmd = input()
+        select_act(int(cmd))
 
 
 if __name__ == "__main__":
