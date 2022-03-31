@@ -11,6 +11,11 @@ bash install.sh
 ## 使い方 / how to use
 
 ```shell
+
+#  対応している全コマンドの中から実行したいコマンドを選べる。（現3種類）
 cleaner
+
+#  デスクトップをきれいにするコマンド
+cleaner -d
 
 ```
