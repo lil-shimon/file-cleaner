@@ -4,8 +4,12 @@ def args_handler(args):
   -dはデスクトップ
   """
 
-  if args == "-d":
+  if args == "-h":
     return 1
+  if args == "-b":
+    return 2
+  if args == "-d":
+    return 3
   else:
     print("未対応です")
     return
