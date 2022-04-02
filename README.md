@@ -16,6 +16,12 @@ bash install.sh
 cleaner
 
 #  デスクトップをきれいにするコマンド
+cleaner -h
+
+#  バックアップをきれいにするコマンド
+cleaner -b
+
+#  ダウンロードフォルダをきれいにするコマンド
 cleaner -d
 
 ```
